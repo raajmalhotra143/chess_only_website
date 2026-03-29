@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Play Chess Online | The Silent Strategist</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "background": "#131313",
+              "surface-variant": "#353534",
+              "error-container": "#93000a",
+              "outline": "#8a9485",
+              "on-secondary-fixed-variant": "#343d96",
+              "primary-fixed-dim": "#88d982",
+              "secondary-container": "#343d96",
+              "on-secondary-container": "#a8afff",
+              "surface": "#131313",
+              "secondary": "#bdc2ff",
+              "surface-container-high": "#2a2a2a",
+              "inverse-surface": "#e5e2e1",
+              "surface-container-highest": "#353534",
+              "surface-container-lowest": "#0e0e0e",
+              "on-secondary-fixed": "#000767",
+              "tertiary-container": "#b14b6f",
+              "outline-variant": "#40493d",
+              "surface-container": "#201f1f",
+              "surface-dim": "#131313",
+              "on-error-container": "#ffdad6",
+              "on-tertiary": "#610931",
+              "on-secondary": "#1b247f",
+              "inverse-on-surface": "#313030",
+              "on-background": "#e5e2e1",
+              "surface-container-low": "#1c1b1b",
+              "primary-fixed": "#a3f69c",
+              "tertiary-fixed-dim": "#ffb1c7",
+              "secondary-fixed-dim": "#bdc2ff",
+              "on-primary-fixed": "#002204",
+              "tertiary": "#ffb1c7",
+              "primary": "#88d982",
+              "on-tertiary-container": "#ffedf0",
+              "on-surface-variant": "#bfcaba",
+              "on-surface": "#e5e2e1",
+              "on-primary-fixed-variant": "#005312",
+              "on-primary": "#003909",
+              "inverse-primary": "#1b6d24",
+              "surface-tint": "#88d982",
+              "tertiary-fixed": "#ffd9e2",
+              "on-tertiary-fixed": "#3f001c",
+              "error": "#ffb4ab",
+              "secondary-fixed": "#e0e0ff",
+              "primary-container": "#2e7d32",
+              "on-primary-container": "#cbffc2",
+              "on-tertiary-fixed-variant": "#7f2448",
+              "surface-bright": "#393939",
+              "on-error": "#690005"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(42, 42, 42, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .chess-bg-gradient {
+            background: radial-gradient(circle at center, rgba(46, 125, 50, 0.15) 0%, rgba(19, 19, 19, 1) 70%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary/30">
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-0 w-full z-50 bg-neutral-900/80 backdrop-blur-xl flex justify-between items-center px-8 h-16 w-full shadow-2xl shadow-black/50">
+<div class="text-2xl font-bold tracking-tighter text-green-400 italic font-headline">Play Chess Online</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="font-manrope text-sm tracking-tight text-green-400 border-b-2 border-green-400 pb-1" href="#">Play</a>
+<a class="font-manrope text-sm tracking-tight text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Puzzles</a>
+<a class="font-manrope text-sm tracking-tight text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Learn</a>
+<a class="font-manrope text-sm tracking-tight text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Community</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-neutral-800/50 rounded-lg transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined text-neutral-400">dark_mode</span>
+</button>
+<button class="p-2 hover:bg-neutral-800/50 rounded-lg transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined text-neutral-400">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/20">
+<img alt="User Profile Avatar" data-alt="Close up portrait of a professional chess player looking thoughtful with soft cinematic lighting on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqTu9TMdbDVCa-x9tmfmvqdpn_90pKZBTs713Re4wg66iYcj9nio7ySR5UQSY5Z6qdSeNOlQhbE8RAHwMmWtEOJP3gAn-eUcG6AM2qACJqfLLLG26x7b-vA_7A8TtrayCfgZDgsxoYCVP3tLUC6L21afhYKLUkDVeDoB_BSW7l5UmjlBYD1T2Bi6yxkKJlL41kMAwy33ZtU_jTDiDki33ihSJkItJSQJDo1j8dzRc45tGjct4C0k0UteO12bo16EqvMCfhV12hIkA"/>
+</div>
+</div>
+</nav>
+<!-- Main Content Shell -->
+<main class="relative min-h-screen flex flex-col items-center justify-center pt-16 px-6 overflow-hidden">
+<!-- Background Layer -->
+<div class="absolute inset-0 z-0 chess-bg-gradient"></div>
+<div class="absolute inset-0 z-0 opacity-20">
+<img alt="Minimalist Chess Board Background" class="w-full h-full object-cover grayscale blur-sm" data-alt="High-angle artistic shot of a minimalist wooden chess board with blurred pieces in the background, soft shadows, and moody studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCd9zhgcSQQnCS7DeIAny2BKikx5BHI_r3slpJEyw0NODpxl95BDG5w1ywowdwfamq_khIaetuGXM87sl72oSxccaBgk65ib8hM_aeSopbhmjwyHHRF5xdw3AUgi18MC4WtibICoWNkh4f6kfrcBGun99VrPRJyM_Jdln5WiTXctU8LEVG27e-UVUUiCiID1gCUTO_DrEVmp7K8dXKcE9RwBImkaik3ffegTjpL6_jSPrjNED1j0cE0R9vOfbto3edAx-CXYTo47So"/>
+</div>
+<!-- Landing Content -->
+<div class="relative z-10 w-full max-w-4xl text-center space-y-12">
+<!-- Hero Typography -->
+<div class="space-y-4">
+<h1 class="text-6xl md:text-8xl font-headline font-extrabold tracking-tighter text-on-background">
+                    Play Chess Online
+                </h1>
+<p class="text-xl md:text-2xl text-on-surface-variant font-light max-w-2xl mx-auto leading-relaxed">
+                    Play instantly with friends using a simple code.
+                </p>
+</div>
+<!-- Interaction Card (The Core Landing Logic) -->
+<div class="glass-card p-8 md:p-12 rounded-xl shadow-2xl border border-outline-variant/10 max-w-lg mx-auto space-y-10">
+<!-- Create Section -->
+<div class="space-y-6">
+<button class="group relative w-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-5 rounded-full font-headline font-bold text-lg shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<span>Create Game</span>
+</button>
+</div>
+<!-- Divider with Tonal Shift -->
+<div class="flex items-center gap-4">
+<div class="h-[1px] flex-1 bg-outline-variant/20"></div>
+<span class="text-label-sm uppercase tracking-widest text-outline font-bold">OR</span>
+<div class="h-[1px] flex-1 bg-outline-variant/20"></div>
+</div>
+<!-- Join Section -->
+<div class="space-y-6 text-left">
+<div class="space-y-2">
+<label class="block text-label-md font-semibold text-on-surface ml-1" for="room-code">Room Code</label>
+<input class="w-full bg-surface-container-lowest border-none ring-1 ring-outline-variant/30 focus:ring-2 focus:ring-primary rounded-lg py-4 px-6 text-on-surface placeholder:text-neutral-600 transition-all outline-none text-center tracking-[0.5em] font-mono text-xl" id="room-code" placeholder="Enter Room Code" type="text"/>
+</div>
+<button class="w-full bg-surface-variant/20 hover:bg-surface-variant/40 backdrop-blur-sm text-primary py-4 rounded-lg font-headline font-bold border border-primary/20 hover:border-primary/40 active:scale-95 transition-all duration-200 flex items-center justify-center gap-3">
+<span class="material-symbols-outlined">join_inner</span>
+<span>Join Game</span>
+</button>
+</div>
+</div>
+<!-- Secondary Features / Stats -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-12">
+<div class="bg-surface-container-low/40 backdrop-blur-md p-6 rounded-lg border border-outline-variant/5">
+<span class="material-symbols-outlined text-primary mb-3 block text-3xl">bolt</span>
+<h3 class="font-headline font-bold text-lg">Instant Play</h3>
+<p class="text-sm text-on-surface-variant mt-2">No accounts needed. Just generate a code and start the match.</p>
+</div>
+<div class="bg-surface-container-low/40 backdrop-blur-md p-6 rounded-lg border border-outline-variant/5">
+<span class="material-symbols-outlined text-secondary mb-3 block text-3xl">security</span>
+<h3 class="font-headline font-bold text-lg">Private Rooms</h3>
+<p class="text-sm text-on-surface-variant mt-2">Secure end-to-end game logic for competitive play.</p>
+</div>
+<div class="bg-surface-container-low/40 backdrop-blur-md p-6 rounded-lg border border-outline-variant/5">
+<span class="material-symbols-outlined text-tertiary mb-3 block text-3xl">leaderboard</span>
+<h3 class="font-headline font-bold text-lg">Elo Tracking</h3>
+<p class="text-sm text-on-surface-variant mt-2">Optional ranking system for "The Silent Strategist" edition.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="w-full py-12 px-8 bg-neutral-950 border-t border-neutral-800/30">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="font-inter text-xs uppercase tracking-widest text-neutral-600">
+                © 2024 Play Chess Online. The Silent Strategist Edition.
+            </div>
+<div class="flex gap-8">
+<a class="font-inter text-xs uppercase tracking-widest text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4 opacity-80 hover:opacity-100" href="#">About</a>
+<a class="font-inter text-xs uppercase tracking-widest text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4 opacity-80 hover:opacity-100" href="#">GitHub</a>
+<a class="font-inter text-xs uppercase tracking-widest text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4 opacity-80 hover:opacity-100" href="#">Terms</a>
+<a class="font-inter text-xs uppercase tracking-widest text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4 opacity-80 hover:opacity-100" href="#">Privacy</a>
+<a class="font-inter text-xs uppercase tracking-widest text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4 opacity-80 hover:opacity-100" href="#">Support</a>
+</div>
+</div>
+</footer>
+</body></html>

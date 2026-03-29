@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Play Chess Online - The Silent Strategist</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;600;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed-dim": "#bdc2ff",
+              "surface-variant": "#353534",
+              "on-tertiary": "#610931",
+              "surface-container-high": "#2a2a2a",
+              "on-tertiary-fixed-variant": "#7f2448",
+              "on-primary-container": "#cbffc2",
+              "on-primary": "#003909",
+              "secondary-container": "#343d96",
+              "on-error-container": "#ffdad6",
+              "inverse-primary": "#1b6d24",
+              "on-secondary-fixed": "#000767",
+              "on-secondary-container": "#a8afff",
+              "inverse-surface": "#e5e2e1",
+              "error": "#ffb4ab",
+              "on-surface": "#e5e2e1",
+              "on-error": "#690005",
+              "inverse-on-surface": "#313030",
+              "primary-container": "#2e7d32",
+              "background": "#131313",
+              "secondary": "#bdc2ff",
+              "primary-fixed": "#a3f69c",
+              "on-secondary": "#1b247f",
+              "secondary-fixed": "#e0e0ff",
+              "error-container": "#93000a",
+              "tertiary-container": "#b14b6f",
+              "on-secondary-fixed-variant": "#343d96",
+              "tertiary": "#ffb1c7",
+              "on-tertiary-fixed": "#3f001c",
+              "on-primary-fixed-variant": "#005312",
+              "outline": "#8a9485",
+              "on-primary-fixed": "#002204",
+              "surface-container-lowest": "#0e0e0e",
+              "primary": "#88d982",
+              "outline-variant": "#40493d",
+              "tertiary-fixed": "#ffd9e2",
+              "on-surface-variant": "#bfcaba",
+              "surface-bright": "#393939",
+              "surface-container-highest": "#353534",
+              "on-background": "#e5e2e1",
+              "surface-container-low": "#1c1b1b",
+              "surface-dim": "#131313",
+              "tertiary-fixed-dim": "#ffb1c7",
+              "surface-tint": "#88d982",
+              "surface": "#131313",
+              "surface-container": "#201f1f",
+              "primary-fixed-dim": "#88d982",
+              "on-tertiary-container": "#ffedf0"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(53, 53, 52, 0.6);
+            backdrop-filter: blur(24px);
+        }
+        .signature-gradient {
+            background: linear-gradient(135deg, #88d982 0%, #2e7d32 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body min-h-screen flex flex-col selection:bg-primary selection:text-on-primary">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-neutral-900/80 backdrop-blur-xl flex justify-between items-center px-8 h-16 w-full shadow-2xl shadow-black/50">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-green-400 dark:text-green-400 italic font-headline">Play Chess Online</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-green-400 border-b-2 border-green-400 pb-1 font-manrope text-sm tracking-tight" href="#">Play</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors font-manrope text-sm tracking-tight" href="#">Puzzles</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors font-manrope text-sm tracking-tight" href="#">Learn</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors font-manrope text-sm tracking-tight" href="#">Community</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-neutral-800/50 rounded-lg transition-all active:scale-95 text-neutral-400">
+<span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+</button>
+<button class="p-2 hover:bg-neutral-800/50 rounded-lg transition-all active:scale-95 text-neutral-400">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant/20">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="Close-up portrait of a professional chess player with a focused expression in a dimly lit room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfHjtF8x7AdxwdiB8sQqiYMErLYMjijFfm3aUBdr-V_rRs2CmyPWbsFyx5otMBKb4PnidQ2MWqXOWLbXCxJNLO3r0kHYjLOT2jj6o_cBHqg4rm0jGm0RkgWluZR6pjBPh-v1qP-9xy8rJwhHGnxltPWLqaWY4CmopkqWgOERAYx3kUF8ppeWuh4-cvV0zr-zUgjFT5C4zN9b_yoMBL5BPg7gzRC5s7PysshoWyExzWHY8vJIvestOVkw_d7hnNLGyxImor86ha2NE"/>
+</div>
+</div>
+</nav>
+<!-- Side Navigation Bar (Hidden on Mobile) -->
+<aside class="hidden lg:flex h-screen w-64 fixed left-0 top-0 bg-neutral-900 flex-col py-6 pt-24 z-40">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3 mb-6 p-3 bg-neutral-950 rounded-xl">
+<div class="w-10 h-10 rounded-lg overflow-hidden">
+<img alt="Grandmaster Profile" class="w-full h-full object-cover" data-alt="Minimalist abstract portrait of a grandmaster silhouette against a dark textured background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-yhvzpb091JNxM-bw03rN5XWiQbg5JHlm697k77uxHSTbOoNsTL0sygc5cwSlzTHnMxzgfii-bvCcmS80atbffWiQb0lZooMGpiUxo9Oc2w3k1YtJCe0q6XOC-M1RoBxJ6qLIsoIqHEArQcyKcZFgXjUgz5AGm-_vmIzLwoPLT4ls66wMrCjUuEwIgipXXba0emVIT-okbKeeaqPNAjcwVRbffFZca4ZDy1Rni__Ht6NoG61rhg4Y4a4fXHFbhb5dfTGQY-1pXYU"/>
+</div>
+<div>
+<p class="text-green-400 font-black text-sm font-headline">The Silent Strategist</p>
+<p class="text-neutral-500 text-xs">Rating: 2450</p>
+</div>
+</div>
+<button class="w-full py-3 px-4 signature-gradient text-on-primary font-bold rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+                New Game
+            </button>
+</div>
+<div class="flex-grow">
+<div class="bg-green-900/20 text-green-400 rounded-xl mx-2 flex items-center gap-4 px-4 py-3 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-manrope font-semibold">Home</span>
+</div>
+<div class="text-neutral-500 hover:text-neutral-200 px-4 py-3 mx-2 hover:bg-neutral-800 rounded-xl transition-all cursor-pointer flex items-center gap-4">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-manrope font-semibold">Play</span>
+</div>
+<div class="text-neutral-500 hover:text-neutral-200 px-4 py-3 mx-2 hover:bg-neutral-800 rounded-xl transition-all cursor-pointer flex items-center gap-4">
+<span class="material-symbols-outlined" data-icon="extension">extension</span>
+<span class="font-manrope font-semibold">Puzzles</span>
+</div>
+<div class="text-neutral-500 hover:text-neutral-200 px-4 py-3 mx-2 hover:bg-neutral-800 rounded-xl transition-all cursor-pointer flex items-center gap-4">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+<span class="font-manrope font-semibold">Messages</span>
+</div>
+<div class="text-neutral-500 hover:text-neutral-200 px-4 py-3 mx-2 hover:bg-neutral-800 rounded-xl transition-all cursor-pointer flex items-center gap-4">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-manrope font-semibold">Archive</span>
+</div>
+</div>
+<div class="px-2 mt-auto">
+<div class="text-neutral-500 hover:text-neutral-200 px-4 py-3 hover:bg-neutral-800 rounded-xl transition-all cursor-pointer flex items-center gap-4">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-manrope font-semibold">Settings</span>
+</div>
+<div class="text-neutral-500 hover:text-neutral-200 px-4 py-3 hover:bg-neutral-800 rounded-xl transition-all cursor-pointer flex items-center gap-4">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-manrope font-semibold">Help</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-20 pb-8 lg:ml-64 flex flex-col items-center justify-center px-4 lg:px-8">
+<div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-10">
+<!-- Chess Board Area -->
+<div class="lg:col-span-8 flex flex-col items-center gap-6">
+<!-- Opponent Card -->
+<div class="w-full flex justify-between items-center p-4 bg-surface-container-low rounded-xl border-l-4 border-transparent">
+<div class="flex items-center gap-4">
+<div class="relative w-14 h-14 rounded-lg overflow-hidden border border-outline-variant/30">
+<img alt="Opponent Profile" class="w-full h-full object-cover" data-alt="Portrait of a serious competitor in a high-stakes match with dramatic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkCA7PJj0DImsXPYo6U8CVyTMzn9tirJMpGKYqUVkD9U4aySQyWWPI4QFnqM9fu1uLV8oNUghvM4lJjIM3YbH9pc50CEg-k4DnhLrCFAe8vW0-l7RvWsTZ-j5nmkRFh9PyNCnuWV0FOOU_OUhWFnnnNnHl6E9dFr2b3b4BS7FaGK9xLRnSAn1TVT1f6kP1nE6AvkOX1ISzkCdHMPBO_wPLwCZuzUpzWhdvfzj62Gc5Y4ccp4G_ifOSRQ8umCa_HDJVL-I9BGSUuAo"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-surface-container-low"></div>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-headline font-bold text-on-surface">GM MagnusCarlsen</h3>
+<span class="bg-primary-container/20 text-primary px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Opponent</span>
+</div>
+<p class="text-neutral-500 text-sm font-label">Rating: 2882 • Norway</p>
+<p class="text-primary/70 text-xs mt-1 animate-pulse italic">Opponent is thinking...</p>
+</div>
+</div>
+<div class="bg-surface-container-high px-6 py-3 rounded-xl font-headline font-black text-2xl tracking-tight text-on-surface flex items-center gap-3">
+<span class="material-symbols-outlined text-neutral-500" data-icon="timer">timer</span>
+                        08:42
+                    </div>
+</div>
+<!-- The Chessboard -->
+<div class="relative w-full aspect-square max-w-[680px] bg-surface-container-lowest p-2 rounded-lg shadow-2xl">
+<!-- Board Grid -->
+<div class="grid grid-cols-8 grid-rows-8 w-full h-full border border-outline-variant/10">
+<!-- We alternate squares. In a real app we'd map this. Manually generating key highlights. -->
+<!-- Row 8 down to 1 -->
+<!-- Top left is A8 (light) -->
+<div class="bg-surface-bright relative flex items-center justify-center group cursor-pointer">
+<span class="absolute top-1 left-1 text-[10px] text-outline opacity-40 font-label">8</span>
+</div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<!-- Row 7 to 3 filler... -->
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<!-- E5 Highlighted as active/move dot -->
+<div class="bg-surface-bright relative flex items-center justify-center">
+<div class="w-4 h-4 rounded-full bg-outline/30"></div>
+</div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<!-- C4 Highlighted - Last Move From -->
+<div class="bg-secondary-container/40"></div>
+<div class="bg-surface-container-lowest relative flex items-center justify-center">
+<!-- Example Piece: White Knight -->
+<span class="material-symbols-outlined text-on-surface text-5xl md:text-6xl" style="font-variation-settings: 'FILL' 1;">chess_knight</span>
+</div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<!-- E3 - Selected Piece -->
+<div class="bg-primary/20 border-2 border-primary/40 relative flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface text-5xl md:text-6xl" style="font-variation-settings: 'FILL' 1;">chess_pawn</span>
+</div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<!-- Row 1 -->
+<div class="bg-surface-container-lowest relative">
+<span class="absolute bottom-1 left-1 text-[10px] text-outline opacity-40 font-label">1</span>
+</div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright relative">
+<span class="absolute bottom-1 right-1 text-[10px] text-outline opacity-40 font-label">H</span>
+</div>
+</div>
+<!-- Coordinates Labels -->
+<div class="absolute -bottom-8 left-0 w-full flex justify-around px-8">
+<span class="text-neutral-600 font-label text-xs">A</span>
+<span class="text-neutral-600 font-label text-xs">B</span>
+<span class="text-neutral-600 font-label text-xs">C</span>
+<span class="text-neutral-600 font-label text-xs">D</span>
+<span class="text-neutral-600 font-label text-xs">E</span>
+<span class="text-neutral-600 font-label text-xs">F</span>
+<span class="text-neutral-600 font-label text-xs">G</span>
+<span class="text-neutral-600 font-label text-xs">H</span>
+</div>
+</div>
+<!-- Your Card -->
+<div class="w-full flex justify-between items-center p-4 bg-surface-container-low rounded-xl border-l-4 border-primary shadow-lg shadow-primary/5">
+<div class="flex items-center gap-4">
+<div class="relative w-14 h-14 rounded-lg overflow-hidden border-2 border-primary/30">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Close-up portrait of a professional chess player with a focused expression in a dimly lit room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhCdQAS_iwj2-SDazqYyPGRPAWjXVH5lWauFG3gR-1mHnVZFt_htQB-jMsJIrsXsTqttRl_UmqpHS78rL071-NJ3EDRFE7vsdUjyL-WhVuJ6iE0pmLA7NUvB6p91p46-_42YwFsbZGZCDsWeG031ZIDMjXUgGaq1677uX3iChY-xEVNirFnbgQm2cDBkgOzs4vtM1FbA0olAHD7C8e3d_jzcR9RxU4CqR7KM2koDep9Ub1iBTMac6k2oJNKu86RA0O-fqgq4mAWdI"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-surface-container-low"></div>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-headline font-bold text-on-surface">The Silent Strategist</h3>
+<div class="flex items-center gap-1 text-[10px] text-primary font-bold">
+<span class="material-symbols-outlined scale-75" data-icon="wifi">wifi</span>
+                                    CONNECTED
+                                </div>
+</div>
+<p class="text-neutral-500 text-sm font-label">Rating: 2450 • (You)</p>
+<div class="mt-2 flex gap-2">
+<button class="w-7 h-7 flex items-center justify-center bg-neutral-800 rounded-md hover:bg-neutral-700 text-sm transition-colors">👍</button>
+<button class="w-7 h-7 flex items-center justify-center bg-neutral-800 rounded-md hover:bg-neutral-700 text-sm transition-colors">🔥</button>
+<button class="w-7 h-7 flex items-center justify-center bg-neutral-800 rounded-md hover:bg-neutral-700 text-sm transition-colors">👏</button>
+</div>
+</div>
+</div>
+<div class="signature-gradient px-6 py-3 rounded-xl font-headline font-black text-2xl tracking-tight text-on-primary flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="timer">timer</span>
+                        05:19
+                    </div>
+</div>
+<!-- Your Turn Banner -->
+<div class="mt-2 bg-primary/10 text-primary py-2 px-8 rounded-full font-headline font-bold text-sm tracking-widest uppercase border border-primary/20 animate-pulse">
+                    Your Turn
+                </div>
+</div>
+<!-- Right Sidebar: History & Controls -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<!-- Move History -->
+<div class="bg-surface-container-low rounded-xl flex flex-col h-[500px] shadow-xl overflow-hidden border border-outline-variant/10">
+<div class="p-5 border-b border-outline-variant/10 flex justify-between items-center bg-surface-container">
+<h4 class="font-headline font-bold text-sm uppercase tracking-widest text-neutral-400">Move History</h4>
+<div class="flex gap-2">
+<button class="p-1.5 hover:bg-surface-container-high rounded transition-all text-neutral-500"><span class="material-symbols-outlined text-base" data-icon="first_page">first_page</span></button>
+<button class="p-1.5 hover:bg-surface-container-high rounded transition-all text-neutral-500"><span class="material-symbols-outlined text-base" data-icon="chevron_left">chevron_left</span></button>
+<button class="p-1.5 hover:bg-surface-container-high rounded transition-all text-neutral-500"><span class="material-symbols-outlined text-base" data-icon="chevron_right">chevron_right</span></button>
+<button class="p-1.5 hover:bg-surface-container-high rounded transition-all text-neutral-500"><span class="material-symbols-outlined text-base" data-icon="last_page">last_page</span></button>
+</div>
+</div>
+<div class="flex-grow overflow-y-auto p-2">
+<div class="grid grid-cols-12 gap-y-1 text-sm font-label">
+<!-- Move Pair -->
+<div class="col-span-2 text-neutral-600 text-center py-2">1.</div>
+<div class="col-span-5 py-2 px-3 rounded hover:bg-surface-container-highest cursor-pointer transition-colors text-on-surface">e4</div>
+<div class="col-span-5 py-2 px-3 rounded hover:bg-surface-container-highest cursor-pointer transition-colors text-on-surface">e5</div>
+<!-- Move Pair -->
+<div class="col-span-2 text-neutral-600 text-center py-2">2.</div>
+<div class="col-span-5 py-2 px-3 rounded hover:bg-surface-container-highest cursor-pointer transition-colors text-on-surface">Nf3</div>
+<div class="col-span-5 py-2 px-3 rounded hover:bg-surface-container-highest cursor-pointer transition-colors text-on-surface">Nc6</div>
+<!-- Move Pair -->
+<div class="col-span-2 text-neutral-600 text-center py-2">3.</div>
+<div class="col-span-5 py-2 px-3 rounded hover:bg-surface-container-highest cursor-pointer transition-colors text-on-surface font-bold text-primary bg-primary/10 border-l-2 border-primary">Bc4</div>
+<div class="col-span-5 py-2 px-3 rounded hover:bg-surface-container-highest cursor-pointer transition-colors text-on-surface italic opacity-50">...</div>
+</div>
+</div>
+<!-- Quick Chat/Eval -->
+<div class="p-4 border-t border-outline-variant/10 bg-surface-container-lowest">
+<div class="flex items-center gap-3">
+<div class="h-1 bg-primary w-1/3 rounded-full"></div>
+<div class="h-1 bg-surface-container-highest flex-grow rounded-full"></div>
+<span class="text-[10px] font-bold text-neutral-500">+0.42</span>
+</div>
+</div>
+</div>
+<!-- Game Controls -->
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center gap-2 py-3 px-4 bg-surface-container-high hover:bg-surface-container-highest rounded-xl transition-all font-bold text-sm text-neutral-300">
+<span class="material-symbols-outlined text-lg" data-icon="handshake">handshake</span>
+                        Offer Draw
+                    </button>
+<button class="flex items-center justify-center gap-2 py-3 px-4 bg-error-container/20 hover:bg-error-container/40 rounded-xl transition-all font-bold text-sm text-error">
+<span class="material-symbols-outlined text-lg" data-icon="flag">flag</span>
+                        Resign
+                    </button>
+<button class="flex items-center justify-center gap-2 py-3 px-4 bg-surface-container-high hover:bg-surface-container-highest rounded-xl transition-all font-bold text-sm text-neutral-300">
+<span class="material-symbols-outlined text-lg" data-icon="flip">flip</span>
+                        Flip Board
+                    </button>
+<button class="flex items-center justify-center gap-2 py-3 px-4 bg-surface-container-high hover:bg-surface-container-highest rounded-xl transition-all font-bold text-sm text-neutral-300">
+<span class="material-symbols-outlined text-lg" data-icon="volume_up">volume_up</span>
+                        Sound
+                    </button>
+</div>
+<!-- Analysis/Spectators -->
+<div class="bg-surface-container-low rounded-xl p-4 border border-outline-variant/5">
+<div class="flex items-center justify-between mb-4">
+<h5 class="text-xs font-headline font-bold text-neutral-500 uppercase tracking-widest">Spectators</h5>
+<span class="bg-neutral-800 text-neutral-400 px-2 py-0.5 rounded text-[10px]">1,248 online</span>
+</div>
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface-container-low overflow-hidden"><img alt="Avatar" data-alt="Close-up of a smiling young man in a casual hoodie" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFCzpqCFLvCE-DLFnJjwrdMRpaToo9v-63zphohzHOwiKdI3fZJ_fBL0N4GZFq872qYpg4grLUUUrLKScbMqfDAd5FXErTycamYQFJIA_c8sltLUULJIf7kafpdRFtDiyvj9LBX42_F7K95uRnbP-fKqJKBbGKoi9hGSSbdhMBi_LxEANY9KicRhUVnJi--_ml9vHql-EXFs7plPyUcXVJLrpwwP3LAbprA-rDC3U-VTYLqNFYkKRWwetxGzCjOSnee3rhcwGyNc0"/></div>
+<div class="w-8 h-8 rounded-full border-2 border-surface-container-low overflow-hidden"><img alt="Avatar" data-alt="Portrait of a young woman with a confident smile and professional attire" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWtbgpNq1Br5Gee94NyufSKCBsDEh7Vbl11liKB7kIk1Z-sv0Ps3AZOMbz1yS8-jKecDieBsnxzKLpZwbJ2GfzeOHViCWb9rCZvz9WiXVueOXLlJLDLeDkxuF6gubxKhnoIq5kpQ_gVjx85PDU24QYqJ_SExAaoKqZ1uX2Rnk7RZnOznLwAg0MQvYdWx_3nQzM3zCafJYL9QhGSJG0dTz2haVOmVhpHyIHdjDiLjEEOGYcufF4ugy99IKdKpYPMbdFRDqXAxJoEOs"/></div>
+<div class="w-8 h-8 rounded-full border-2 border-surface-container-low overflow-hidden"><img alt="Avatar" data-alt="Close-up of a man with a friendly expression and short dark hair" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCThdjLb-j4EYH9zdyyuwNMOPixmxKTUztmTnZLN0U1YFt9GfaF8WPVlxR5lec9wNdFYKQ2mfiocjX3Oo1ToyxlVDB7a1dH6i8GVi5936GcDz64WSelZDxW9YFIEegfBZHHlHl0sH9okacwSFD8BO6uQ4Te5kVouVleMfvabsttT1KV9BCRObuimDbJXlfotjfgmK4SGbR6lyJOtk3W7LDnZTSqiiwBs6vOwNe8LMbxaY_kvVdeupmNpoVQyDYFL-9ZsJ-3xOXntEQ"/></div>
+<div class="w-8 h-8 rounded-full border-2 border-surface-container-low bg-neutral-800 flex items-center justify-center text-[10px] text-neutral-400 font-bold">+1.2k</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-8 bg-neutral-950 border-t border-neutral-800/30 flex flex-col md:flex-row justify-between items-center gap-6 z-10 lg:ml-64 lg:w-[calc(100%-16rem)]">
+<span class="font-inter text-xs uppercase tracking-widest text-neutral-600">© 2024 Play Chess Online. The Silent Strategist Edition.</span>
+<div class="flex gap-8">
+<a class="text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4 opacity-80 hover:opacity-100 font-inter text-xs uppercase tracking-widest" href="#">About</a>
+<a class="text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4 opacity-80 hover:opacity-100 font-inter text-xs uppercase tracking-widest" href="#">GitHub</a>
+<a class="text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4 opacity-80 hover:opacity-100 font-inter text-xs uppercase tracking-widest" href="#">Terms</a>
+<a class="text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4 opacity-80 hover:opacity-100 font-inter text-xs uppercase tracking-widest" href="#">Support</a>
+</div>
+</footer>
+</body></html>

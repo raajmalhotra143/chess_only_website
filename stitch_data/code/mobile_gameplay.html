@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Play Chess Online - Mobile Game</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "background": "#131313",
+              "surface-variant": "#353534",
+              "error-container": "#93000a",
+              "outline": "#8a9485",
+              "on-secondary-fixed-variant": "#343d96",
+              "primary-fixed-dim": "#88d982",
+              "secondary-container": "#343d96",
+              "on-secondary-container": "#a8afff",
+              "surface": "#131313",
+              "secondary": "#bdc2ff",
+              "surface-container-high": "#2a2a2a",
+              "inverse-surface": "#e5e2e1",
+              "surface-container-highest": "#353534",
+              "surface-container-lowest": "#0e0e0e",
+              "on-secondary-fixed": "#000767",
+              "tertiary-container": "#b14b6f",
+              "outline-variant": "#40493d",
+              "surface-container": "#201f1f",
+              "surface-dim": "#131313",
+              "on-error-container": "#ffdad6",
+              "on-tertiary": "#610931",
+              "on-secondary": "#1b247f",
+              "inverse-on-surface": "#313030",
+              "on-background": "#e5e2e1",
+              "surface-container-low": "#1c1b1b",
+              "primary-fixed": "#a3f69c",
+              "tertiary-fixed-dim": "#ffb1c7",
+              "secondary-fixed-dim": "#bdc2ff",
+              "on-primary-fixed": "#002204",
+              "tertiary": "#ffb1c7",
+              "primary": "#88d982",
+              "on-tertiary-container": "#ffedf0",
+              "on-surface-variant": "#bfcaba",
+              "on-surface": "#e5e2e1",
+              "on-primary-fixed-variant": "#005312",
+              "on-primary": "#003909",
+              "inverse-primary": "#1b6d24",
+              "surface-tint": "#88d982",
+              "tertiary-fixed": "#ffd9e2",
+              "on-tertiary-fixed": "#3f001c",
+              "error": "#ffb4ab",
+              "secondary-fixed": "#e0e0ff",
+              "primary-container": "#2e7d32",
+              "on-primary-container": "#cbffc2",
+              "on-tertiary-fixed-variant": "#7f2448",
+              "surface-bright": "#393939",
+              "on-error": "#690005"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chess-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            aspect-ratio: 1 / 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body selection:bg-primary/30">
+<!-- Top Navigation Bar (Shared Component) -->
+<header class="bg-neutral-900/80 backdrop-blur-xl fixed top-0 w-full z-50 shadow-2xl shadow-black/50 h-16 flex justify-between items-center px-4 md:px-8">
+<div class="text-2xl font-bold tracking-tighter text-green-400 italic font-headline">Play Chess Online</div>
+<nav class="hidden md:flex items-center gap-6 font-manrope text-sm tracking-tight">
+<a class="text-green-400 border-b-2 border-green-400 pb-1" href="#">Play</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Puzzles</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Learn</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Community</a>
+</nav>
+<div class="flex items-center gap-3">
+<button class="p-2 hover:bg-neutral-800/50 rounded-lg transition-all active:scale-95 duration-200 text-neutral-400">
+<span class="material-symbols-outlined">dark_mode</span>
+</button>
+<button class="p-2 hover:bg-neutral-800/50 rounded-lg transition-all active:scale-95 duration-200 text-neutral-400">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/30">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="close-up portrait of a professional man with a neutral expression and soft lighting on a grey background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGdxydlydq7bGa_xY1I6ptoOiAyYLRbC0LLkwFLqpEHbhx5_CtjZTzDZStmX9G1buHggUDibya79Es0lwYEnKvyLX2Yjdo_QLKHPnMzgUGu3AKkD2N_wYecZeUluJ1IF3pB_psUjtFpzDHAMw3UrtUgGN_8z1ROBK6ePbgJJfpyOIsk2eDZ_XDfHBL6LfJ9ktvFxtIJuCEfTdJBiJVxKeevLu6OQ_Usymgzl1wFLbDknEXy1m08JaK14Isv6QGQfTwZmlmmYCazNU"/>
+</div>
+</div>
+</header>
+<main class="pt-20 pb-24 md:pb-8 px-4 max-w-2xl mx-auto flex flex-col gap-4">
+<!-- Opponent Info -->
+<div class="flex items-center justify-between bg-surface-container-low p-3 rounded-lg">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-md overflow-hidden ring-2 ring-surface-variant">
+<img alt="Opponent Avatar" class="w-full h-full object-cover" data-alt="professional male portrait with sharp focus and clean minimalist studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzZ9Hn5_5lcWi3JvWeFAUuq_A0fuzpmAc64B4FEborpVP_qUKDr1jzlHg6MpBchhaezgyhhqKs_ebtdZUYb9aZq-M7WsKzAQ68xJLKHSh8G_V0oqaW15M5HiaAafcTWrcVPDY9J2FaQj5GLXRrzCREc4PZlVM3ycgmLV_7-PfLfeQ8-7qZcl44dpeb6ekLxUQ_dMb8fPdzlxraTtbyK6xQ6YPAVccfr-5cZR56YnwUwJEIELuxn2_BkHOZjXXigACDdMWMcMQz9_E"/>
+</div>
+<div>
+<div class="font-headline font-bold text-sm leading-none flex items-center gap-2">
+                        GM SilentStrategist
+                        <span class="bg-surface-variant text-[10px] px-1.5 py-0.5 rounded uppercase tracking-widest text-on-surface-variant">2450</span>
+</div>
+<div class="text-xs text-neutral-500 mt-1">United Kingdom</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest px-4 py-2 rounded-md font-mono text-xl font-bold text-on-surface">
+                10:00
+            </div>
+</div>
+<!-- The Chess Board -->
+<div class="relative w-full aspect-square rounded-md overflow-hidden shadow-2xl shadow-black/40 bg-surface-container-lowest">
+<div class="chess-grid w-full h-full">
+<!-- Squares Generation (Simulated for UI) -->
+<!-- Row 1 -->
+<div class="bg-surface-bright flex items-center justify-center relative">
+<span class="absolute top-1 left-1 text-[8px] text-neutral-500 opacity-40">8</span>
+</div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<!-- Row 2 (Simplified filling) -->
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<!-- Mid Row (Active Piece Example) -->
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-secondary-container/40"></div> <!-- Last move square -->
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<!-- Mid Row (Highlight Example) -->
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright flex items-center justify-center">
+<div class="w-4 h-4 rounded-full border-2 border-outline/30"></div> <!-- Move hint -->
+</div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<!-- Bottom Rows -->
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-container-lowest flex items-end justify-end relative">
+<span class="absolute bottom-1 right-1 text-[8px] text-neutral-500 opacity-40">h</span>
+</div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright"></div>
+<div class="bg-surface-container-lowest"></div>
+<div class="bg-surface-bright flex items-end justify-end relative">
+<span class="absolute bottom-1 right-1 text-[8px] text-neutral-500 opacity-40">a</span>
+</div>
+</div>
+<!-- Floating Evaluation Bar (Asymmetric/Modern touch) -->
+<div class="absolute right-0 top-0 h-full w-1 flex flex-col">
+<div class="bg-on-surface h-[45%] w-full"></div>
+<div class="bg-neutral-800 h-[55%] w-full"></div>
+</div>
+</div>
+<!-- Player Info -->
+<div class="flex items-center justify-between bg-surface-container-low p-3 rounded-lg">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-md overflow-hidden ring-2 ring-primary/20">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="close-up portrait of a professional man with a neutral expression and soft lighting on a grey background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_3VThNCdx2kv-ptDK7rd0yMtgA8MCcICzn0agA_g4DrVyj0nB8r68VjhX2m_ysutZHFexjlU1n3dfWFVZ3X2Zv3kyFXWgdy0eUBcx5jXSwf2ZBHHVF3e5wjI4HYVeWeV5_tvlKX581WJBiPI7Gzi-Gv55eoGTTqfcmWa1KcIEYUsqI9dVFhSvKjY3MtgJts9jia9NfdmOpFpgsloduyziap-_unkyVM0ZxTh_FS3LokfNPBOrbwIKfq1xU6lLfYk9WNhY_qhREtg"/>
+</div>
+<div>
+<div class="font-headline font-bold text-sm leading-none flex items-center gap-2">
+                        You
+                        <span class="bg-primary/20 text-primary text-[10px] px-1.5 py-0.5 rounded uppercase tracking-widest">2390</span>
+</div>
+<div class="text-xs text-neutral-500 mt-1">Status: Thinking...</div>
+</div>
+</div>
+<div class="bg-primary/10 border border-primary/20 px-4 py-2 rounded-md font-mono text-xl font-bold text-primary">
+                08:42
+            </div>
+</div>
+<!-- Collapsible Move History -->
+<div class="bg-surface-container rounded-xl overflow-hidden">
+<button class="w-full px-4 py-3 flex items-center justify-between text-sm font-semibold border-b border-outline-variant/10">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">history</span>
+                    Move History
+                </span>
+<span class="material-symbols-outlined">expand_more</span>
+</button>
+<div class="p-3 grid grid-cols-2 gap-x-8 gap-y-2 text-sm">
+<div class="flex items-center justify-between">
+<span class="text-neutral-500 w-4">1.</span>
+<span class="flex-1 ml-4 text-on-surface">e4</span>
+<span class="bg-surface-container-highest px-2 py-0.5 rounded text-xs">e5</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-neutral-500 w-4">2.</span>
+<span class="flex-1 ml-4 text-on-surface">Nf3</span>
+<span class="bg-surface-container-highest px-2 py-0.5 rounded text-xs">Nc6</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-neutral-500 w-4">3.</span>
+<span class="flex-1 ml-4 text-on-surface font-bold text-primary">Bb5</span>
+<span class="text-neutral-600">...</span>
+</div>
+</div>
+</div>
+<!-- Action Controls -->
+<div class="grid grid-cols-2 gap-3 mt-2">
+<button class="flex items-center justify-center gap-2 py-4 rounded-xl bg-surface-container-high text-on-surface font-headline font-bold tracking-tight active:scale-95 transition-all">
+<span class="material-symbols-outlined text-secondary">handshake</span>
+                Offer Draw
+            </button>
+<button class="flex items-center justify-center gap-2 py-4 rounded-xl bg-surface-container-high text-error font-headline font-bold tracking-tight active:scale-95 transition-all">
+<span class="material-symbols-outlined">flag</span>
+                Resign
+            </button>
+</div>
+<!-- Main Action Button -->
+<button class="w-full py-5 mt-2 rounded-xl bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-extrabold text-lg shadow-xl shadow-primary/20 active:scale-[0.98] transition-all">
+            NEW GAME
+        </button>
+</main>
+<!-- Bottom Navigation (Shared Component - Mobile Only) -->
+<footer class="md:hidden fixed bottom-0 w-full bg-neutral-900 border-t border-neutral-800/30 px-6 py-3 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 text-green-400">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-[10px] font-manrope font-semibold">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-neutral-500 hover:text-neutral-200 transition-colors">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="text-[10px] font-manrope font-semibold">Play</span>
+</button>
+<div class="relative -top-6">
+<button class="w-14 h-14 rounded-full bg-green-400 text-neutral-950 flex items-center justify-center shadow-lg shadow-green-400/30 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'wght' 600;">add</span>
+</button>
+</div>
+<button class="flex flex-col items-center gap-1 text-neutral-500 hover:text-neutral-200 transition-colors">
+<span class="material-symbols-outlined">extension</span>
+<span class="text-[10px] font-manrope font-semibold">Puzzles</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-neutral-500 hover:text-neutral-200 transition-colors">
+<span class="material-symbols-outlined">mail</span>
+<span class="text-[10px] font-manrope font-semibold">Inbox</span>
+</button>
+</footer>
+<!-- Desktop Footer Link Section (Shared Component) -->
+<div class="hidden md:flex flex-col items-center gap-6 py-12 px-8 bg-neutral-950 border-t border-neutral-800/30 mt-12">
+<div class="flex gap-8">
+<a class="font-inter text-xs uppercase tracking-widest text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4" href="#">About</a>
+<a class="font-inter text-xs uppercase tracking-widest text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4" href="#">GitHub</a>
+<a class="font-inter text-xs uppercase tracking-widest text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4" href="#">Terms</a>
+<a class="font-inter text-xs uppercase tracking-widest text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4" href="#">Privacy</a>
+<a class="font-inter text-xs uppercase tracking-widest text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4" href="#">Support</a>
+</div>
+<p class="font-inter text-xs uppercase tracking-widest text-neutral-600 opacity-80">© 2024 Play Chess Online. The Silent Strategist Edition.</p>
+</div>
+</body></html>

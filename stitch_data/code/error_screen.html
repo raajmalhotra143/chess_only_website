@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "background": "#131313",
+            "surface-variant": "#353534",
+            "error-container": "#93000a",
+            "outline": "#8a9485",
+            "on-secondary-fixed-variant": "#343d96",
+            "primary-fixed-dim": "#88d982",
+            "secondary-container": "#343d96",
+            "on-secondary-container": "#a8afff",
+            "surface": "#131313",
+            "secondary": "#bdc2ff",
+            "surface-container-high": "#2a2a2a",
+            "inverse-surface": "#e5e2e1",
+            "surface-container-highest": "#353534",
+            "surface-container-lowest": "#0e0e0e",
+            "on-secondary-fixed": "#000767",
+            "tertiary-container": "#b14b6f",
+            "outline-variant": "#40493d",
+            "surface-container": "#201f1f",
+            "surface-dim": "#131313",
+            "on-error-container": "#ffdad6",
+            "on-tertiary": "#610931",
+            "on-secondary": "#1b247f",
+            "inverse-on-surface": "#313030",
+            "on-background": "#e5e2e1",
+            "surface-container-low": "#1c1b1b",
+            "primary-fixed": "#a3f69c",
+            "tertiary-fixed-dim": "#ffb1c7",
+            "secondary-fixed-dim": "#bdc2ff",
+            "on-primary-fixed": "#002204",
+            "tertiary": "#ffb1c7",
+            "primary": "#88d982",
+            "on-tertiary-container": "#ffedf0",
+            "on-surface-variant": "#bfcaba",
+            "on-surface": "#e5e2e1",
+            "on-primary-fixed-variant": "#005312",
+            "on-primary": "#003909",
+            "inverse-primary": "#1b6d24",
+            "surface-tint": "#88d982",
+            "tertiary-fixed": "#ffd9e2",
+            "on-tertiary-fixed": "#3f001c",
+            "error": "#ffb4ab",
+            "secondary-fixed": "#e0e0ff",
+            "primary-container": "#2e7d32",
+            "on-primary-container": "#cbffc2",
+            "on-tertiary-fixed-variant": "#7f2448",
+            "surface-bright": "#393939",
+            "on-error": "#690005"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .glass-effect {
+      background: rgba(53, 53, 52, 0.6);
+      backdrop-filter: blur(24px);
+    }
+    .signature-gradient {
+      background: linear-gradient(135deg, #88d982 0%, #2e7d32 100%);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body min-h-screen flex flex-col">
+<!-- TopNavBar Implementation -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-16 w-full bg-neutral-900/80 backdrop-blur-xl shadow-2xl shadow-black/50 font-manrope text-sm tracking-tight">
+<div class="text-2xl font-bold tracking-tighter text-green-400 italic">Play Chess Online</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Play</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Puzzles</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Learn</a>
+<a class="text-neutral-400 hover:text-neutral-200 transition-colors" href="#">Community</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-neutral-800/50 rounded-lg transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined text-neutral-400" data-icon="dark_mode">dark_mode</span>
+</button>
+<button class="p-2 hover:bg-neutral-800/50 rounded-lg transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined text-neutral-400" data-icon="settings">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden bg-surface-container-high border border-outline-variant/20">
+<img alt="User Profile Avatar" data-alt="close-up portrait of a professional chess player in a dimly lit study with a focused expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPshDQgr8QbF5pztZAgrqfNzoXQYAjn3Pnmpgl5WFy15491a0WKoWsA281oue1QAMPOFI0Zu-xZmEDDhwtZxaBEyGsBZUPH_RgNkX3YdKLxd9WaRXLmgK6ixK4p7I65ZEcoVynU0M1Wbt2p97lL8CeJ66cclsyKSlMpPysKGiYPEfcCDxvP3sWLlrWuGIczqrvtnnY9v8K1asD7GKYK5eDi3a2QVSGKF88j6HSk64eoda5uCmjDMWPRsUQ_JfQ9pltcmiq-4pYA0Y"/>
+</div>
+</div>
+</nav>
+<main class="flex-grow flex items-center justify-center p-6 mt-16">
+<!-- Error Canvas Container -->
+<div class="max-w-2xl w-full relative">
+<!-- Background Ambient Glow -->
+<div class="absolute -top-24 -left-24 w-64 h-64 bg-primary/10 rounded-full blur-[120px]"></div>
+<div class="absolute -bottom-24 -right-24 w-64 h-64 bg-error/5 rounded-full blur-[120px]"></div>
+<div class="glass-effect rounded-xl p-8 md:p-12 text-center border border-outline-variant/10 shadow-2xl">
+<!-- Iconic Warning Section -->
+<div class="mb-8 inline-flex items-center justify-center w-20 h-20 rounded-full bg-surface-container-lowest text-error border border-error/20">
+<span class="material-symbols-outlined text-4xl" data-icon="block">block</span>
+</div>
+<h1 class="font-headline text-3xl md:text-4xl font-extrabold tracking-tight mb-4 text-on-surface">
+          Invalid or full room code
+        </h1>
+<p class="text-on-surface-variant text-lg max-w-md mx-auto mb-10 leading-relaxed">
+          The strategist was unable to locate your match. The room may be at maximum capacity or the code was entered incorrectly.
+        </p>
+<!-- Input Interaction -->
+<div class="max-w-sm mx-auto mb-8">
+<label class="block text-left text-xs font-label uppercase tracking-widest text-outline mb-2 ml-1">Retry Room Code</label>
+<div class="relative group">
+<input class="w-full bg-surface-container-lowest border-none rounded-lg py-4 px-6 text-xl font-headline font-bold text-center tracking-[0.2em] focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-surface-variant placeholder:tracking-normal" placeholder="e.g. GXM-452-Z" type="text"/>
+<div class="absolute inset-0 rounded-lg pointer-events-none border border-outline-variant/20 group-hover:border-outline-variant/40 transition-colors"></div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+<button class="signature-gradient text-on-primary font-headline font-bold px-8 py-4 rounded-full w-full md:w-auto min-w-[180px] shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+            Try Again
+          </button>
+<button class="bg-surface-variant/30 text-on-surface-variant font-headline font-bold px-8 py-4 rounded-full w-full md:w-auto min-w-[180px] hover:bg-surface-variant/50 active:scale-95 transition-all">
+            Back to Home
+          </button>
+</div>
+<!-- Tactical Hint -->
+<div class="mt-12 pt-8 border-t border-outline-variant/10 flex items-center justify-center gap-3 text-sm text-outline">
+<span class="material-symbols-outlined text-sm" data-icon="info">info</span>
+<span>Check with the host to ensure the code hasn't expired.</span>
+</div>
+</div>
+<!-- Asymmetric Decorative Element (Chess Piece Silhouette) -->
+<div class="hidden lg:block absolute -right-32 top-1/2 -translate-y-1/2 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[200px]" data-icon="chess">chess</span>
+</div>
+</div>
+</main>
+<!-- Footer Implementation -->
+<footer class="w-full py-12 px-8 bg-neutral-950 border-t border-neutral-800/30 font-inter text-xs uppercase tracking-widest">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="text-neutral-600">
+        © 2024 Play Chess Online. The Silent Strategist Edition.
+      </div>
+<div class="flex gap-8">
+<a class="text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4 opacity-80 hover:opacity-100 transition-all" href="#">About</a>
+<a class="text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4 opacity-80 hover:opacity-100 transition-all" href="#">GitHub</a>
+<a class="text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4 opacity-80 hover:opacity-100 transition-all" href="#">Terms</a>
+<a class="text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4 opacity-80 hover:opacity-100 transition-all" href="#">Privacy</a>
+<a class="text-neutral-600 hover:text-neutral-400 underline decoration-green-900 underline-offset-4 opacity-80 hover:opacity-100 transition-all" href="#">Support</a>
+</div>
+</div>
+</footer>
+</body></html>
