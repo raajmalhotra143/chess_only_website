@@ -4,11 +4,11 @@ import { useChess } from '../hooks/useChess';
 import { ChessPiece, PieceColor, PieceType } from '../components/ChessPiece';
 
 // ─── Board colours matching the reference image ────────────────────────────────
-const LIGHT_SQ = '#adbdce'; // muted steel-blue light
-const DARK_SQ  = '#4a6f8f'; // deeper slate-blue dark
+const LIGHT_SQ = '#ebecd0'; // soft cream light
+const DARK_SQ  = '#779556'; // classic grass green dark
 const SELECT_SQ      = '#f6f669cc';  // semi-yellow for selected
-const LAST_MOVE_LIGHT = '#cdd46a';
-const LAST_MOVE_DARK  = '#9aa830';
+const LAST_MOVE_LIGHT = '#f4f6b6'; // lighter yellow highlight for cream sq
+const LAST_MOVE_DARK  = '#b9ca43'; // yellow-green highlight for dark sq
 
 const Game = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
@@ -18,6 +18,7 @@ const Game = () => {
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
   const [lastMove, setLastMove] = useState<{ from: string; to: string } | null>(null);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [showResignConfirm, setShowResignConfirm] = useState(false);
   const movingRef = useRef(false);   // prevent double-click race
 
   // ── square click handler ──────────────────────────────────────────────────
@@ -164,6 +165,28 @@ const Game = () => {
 
   const isGameOver = room?.status === 'finished';
 
+  // ── Determine game result ─────────────────────────────────────────────────
+  type ResultType = 'win' | 'lose' | 'draw';
+  const getGameResult = (): { type: ResultType; reason: string } | null => {
+    if (!isGameOver) return null;
+    if (game.isCheckmate()) {
+      // game.turn() is the color that is IN checkmate (the loser)
+      const loserColor = game.turn();
+      if (!playerColor) return { type: 'draw', reason: 'By Checkmate' };
+      return {
+        type: loserColor !== playerColor ? 'win' : 'lose',
+        reason: 'By Checkmate',
+      };
+    }
+    if (game.isStalemate())       return { type: 'draw', reason: 'By Stalemate' };
+    if (game.isThreefoldRepetition()) return { type: 'draw', reason: 'By Repetition' };
+    if (game.isInsufficientMaterial()) return { type: 'draw', reason: 'Insufficient Material' };
+    if (game.isDraw())            return { type: 'draw', reason: 'By 50-Move Rule' };
+    // Game ended by resignation or external finish
+    return { type: 'lose', reason: 'By Resignation' };
+  };
+  const gameResult = getGameResult();
+
   // ── loading skeleton ──────────────────────────────────────────────────────
   if (loading || !room) {
     return (
@@ -176,7 +199,147 @@ const Game = () => {
 
   // ─────────────────────────────────────────────────────────────────────────
   return (
-    <div className="bg-background text-on-background font-body min-h-screen flex flex-col selection:bg-primary selection:text-on-primary">
+    <div className="bg-background text-on-background font-body min-h-screen flex flex-col selection:bg-primary selection:text-on-primary relative">
+
+      {/* ─── GAME OVER MODAL OVERLAY ─────────────────────────────────────── */}
+      {isGameOver && gameResult && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          style={{ background: 'rgba(13,13,13,0.78)', backdropFilter: 'blur(6px)' }}
+        >
+          {/* Ambient glows */}
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-[120px] pointer-events-none" />
+
+          {/* Card */}
+          <div
+            className="relative z-10 w-full max-w-md rounded-xl border border-outline-variant/20 shadow-2xl p-8 md:p-12 text-center"
+            style={{ background: 'rgba(42,42,42,0.90)', backdropFilter: 'blur(24px)' }}
+          >
+            {/* Badge icon */}
+            <div className={`mb-6 inline-flex p-4 rounded-full ring-1 ${
+              gameResult.type === 'win'
+                ? 'bg-primary-container/20 text-primary ring-primary/30'
+                : gameResult.type === 'lose'
+                  ? 'bg-error-container/20 text-error ring-error/30'
+                  : 'bg-secondary-container/20 text-secondary ring-secondary/30'
+            }`}>
+              <span
+                className="material-symbols-outlined text-5xl"
+                style={{ fontVariationSettings: "'FILL' 1" }}
+              >
+                {gameResult.type === 'win' ? 'emoji_events' : gameResult.type === 'lose' ? 'sentiment_dissatisfied' : 'handshake'}
+              </span>
+            </div>
+
+            {/* Headline */}
+            <h1 className="font-headline text-6xl md:text-7xl font-black tracking-tighter text-on-surface mb-2">
+              {gameResult.type === 'win' ? 'Victory' : gameResult.type === 'lose' ? 'Defeat' : 'Draw'}
+            </h1>
+
+            {/* Reason */}
+            <div className="flex items-center justify-center gap-2 mb-10 text-neutral-400 font-semibold tracking-wider uppercase text-sm">
+              <span className="material-symbols-outlined text-sm">check_circle</span>
+              {gameResult.reason}
+            </div>
+
+            {/* Stats grid */}
+            <div className="grid grid-cols-3 gap-3 mb-10">
+              <div className="bg-surface-container-low p-4 rounded-lg flex flex-col items-center">
+                <span className="text-xs text-neutral-500 uppercase font-bold mb-1">Moves</span>
+                <span className="text-2xl font-bold font-headline text-on-surface">{history.length}</span>
+              </div>
+              <div className="bg-surface-container-low p-4 rounded-lg flex flex-col items-center">
+                <span className="text-xs text-neutral-500 uppercase font-bold mb-1">My Time</span>
+                <span className="text-2xl font-bold font-headline text-on-surface">{formatTime(myTime)}</span>
+              </div>
+              <div className="bg-surface-container-low p-4 rounded-lg flex flex-col items-center">
+                <span className="text-xs text-neutral-500 uppercase font-bold mb-1">Color</span>
+                <span className="text-2xl font-bold font-headline text-on-surface capitalize">
+                  {playerColor === 'w' ? '♔ W' : playerColor === 'b' ? '♚ B' : '—'}
+                </span>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex flex-col gap-4">
+              <button
+                onClick={() => navigate('/')}
+                className="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-4 rounded-xl font-headline font-extrabold text-lg shadow-lg shadow-primary/20 active:scale-95 transition-all"
+              >
+                Play Again
+              </button>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => navigate('/')}
+                  className="flex items-center justify-center gap-2 bg-surface-variant/20 hover:bg-surface-variant/40 border border-outline-variant/20 py-3 rounded-xl font-semibold text-sm transition-all active:scale-95"
+                >
+                  <span className="material-symbols-outlined text-lg">home</span> Home
+                </button>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="flex items-center justify-center gap-2 bg-surface-variant/20 hover:bg-surface-variant/40 border border-outline-variant/20 py-3 rounded-xl font-semibold text-sm transition-all active:scale-95"
+                >
+                  <span className="material-symbols-outlined text-lg">analytics</span> Review
+                </button>
+              </div>
+            </div>
+
+            {/* Opponent info */}
+            <div className="mt-8 pt-6 border-t border-outline-variant/10 flex items-center justify-center gap-6 text-sm">
+              <div className="flex items-center gap-3 opacity-70">
+                <div className="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-lg">
+                  {gameResult.type === 'win' ? '🕹️' : '♟️'}
+                </div>
+                <div className="text-left">
+                  <div className="text-xs font-bold text-on-surface">Opponent</div>
+                  <div className="text-[10px] text-neutral-500">
+                    {gameResult.type === 'win' ? 'Lost' : gameResult.type === 'lose' ? 'Won' : 'Drew'}
+                  </div>
+                </div>
+              </div>
+              <div className="h-6 w-px bg-outline-variant/20" />
+              <button
+                onClick={() => navigate('/')}
+                className="text-xs font-bold text-primary hover:underline underline-offset-4 flex items-center gap-1"
+              >
+                <span className="material-symbols-outlined text-xs">replay</span> Rematch?
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── RESIGN CONFIRM MODAL ────────────────────────────────────────── */}
+      {showResignConfirm && (
+        <div
+          className="fixed inset-0 z-[101] flex items-center justify-center p-4"
+          style={{ background: 'rgba(13,13,13,0.70)', backdropFilter: 'blur(4px)' }}
+        >
+          <div
+            className="relative z-10 w-full max-w-sm rounded-xl border border-outline-variant/20 shadow-2xl p-8 text-center"
+            style={{ background: 'rgba(42,42,42,0.95)', backdropFilter: 'blur(24px)' }}
+          >
+            <span className="material-symbols-outlined text-4xl text-error mb-4 block" style={{ fontVariationSettings: "'FILL' 1" }}>flag</span>
+            <h2 className="font-headline font-bold text-xl text-on-surface mb-2">Resign Game?</h2>
+            <p className="text-neutral-500 text-sm mb-8">This will end the game and count as a loss.</p>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => setShowResignConfirm(false)}
+                className="py-3 rounded-xl font-bold text-sm bg-surface-container-high hover:bg-surface-container-highest transition-all text-neutral-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => { setShowResignConfirm(false); resign(); }}
+                className="py-3 rounded-xl font-bold text-sm bg-error/20 hover:bg-error/40 text-error transition-all border border-error/20"
+              >
+                Yes, Resign
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ─── Top Navigation ─────────────────────────────────────────────── */}
       <nav className="fixed top-0 w-full z-50 bg-neutral-900/80 backdrop-blur-xl flex justify-between items-center px-8 h-16 shadow-2xl shadow-black/50">
@@ -327,15 +490,28 @@ const Game = () => {
             </div>
 
             {/* Turn / status banner */}
-            <div className={`py-2 px-8 rounded-full font-headline font-bold text-sm tracking-widest uppercase border transition-all ${
-              isGameOver
-                ? 'bg-error/10 text-error border-error/20'
-                : isMyTurn
-                  ? 'bg-primary/10 text-primary border-primary/20 animate-pulse'
-                  : 'bg-surface-container text-neutral-500 border-transparent'
-            }`}>
-              {isGameOver ? 'Game Over' : isMyTurn ? '✦ Your Turn' : "Opponent's Turn..."}
-            </div>
+            {(() => {
+              if (isGameOver) return (
+                <div className="py-2 px-8 rounded-full font-headline font-bold text-sm tracking-widest uppercase border bg-error/10 text-error border-error/20">
+                  Game Over
+                </div>
+              );
+              if (room?.status === 'waiting') return (
+                <div className="py-2 px-8 rounded-full font-headline font-bold text-sm tracking-widest uppercase border bg-surface-container text-neutral-500 border-transparent animate-pulse">
+                  ⌛ Waiting for Opponent...
+                </div>
+              );
+              if (isMyTurn) return (
+                <div className="py-2 px-8 rounded-full font-headline font-bold text-sm tracking-widest uppercase border bg-primary/10 text-primary border-primary/20 animate-pulse">
+                  ✦ Your Turn
+                </div>
+              );
+              return (
+                <div className="py-2 px-8 rounded-full font-headline font-bold text-sm tracking-widest uppercase border bg-surface-container text-neutral-500 border-transparent">
+                  Opponent's Turn...
+                </div>
+              );
+            })()}
           </div>
 
           {/* ── Right Sidebar ──────────────────────────────────────────── */}
@@ -393,8 +569,8 @@ const Game = () => {
                 <span className="material-symbols-outlined text-lg">handshake</span> Offer Draw
               </button>
               <button
-                onClick={() => { if (window.confirm('Resign this game?')) resign(); }}
-                disabled={!playerColor || isGameOver}
+                onClick={() => setShowResignConfirm(true)}
+                disabled={!playerColor}
                 className="flex items-center justify-center gap-2 py-3 px-4 bg-error-container/20 hover:bg-error-container/40 rounded-xl transition-all font-bold text-sm text-error disabled:opacity-40"
               >
                 <span className="material-symbols-outlined text-lg">flag</span> Resign
